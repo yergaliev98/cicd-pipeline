@@ -1,5 +1,5 @@
 pipeline {
-  agent  { docker { image 'docker:latest' } }
+
   tools {
     nodejs('23.5.0')
   }
