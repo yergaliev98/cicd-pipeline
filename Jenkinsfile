@@ -1,8 +1,9 @@
 pipeline {
-  agent any
+  agent  { docker { image 'docker:latest' } }
   tools {
     nodejs('23.5.0')
   }
+
   stages {
     stage('Build App') {
       steps {
