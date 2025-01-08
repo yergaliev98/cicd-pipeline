@@ -14,12 +14,14 @@ pipeline {
   stages {
     stage('Build App') {
       steps {
+        sh 'chmod +x ./scripts/build.sh'
         sh './scripts/build.sh'  // Corrected the syntax for calling the shell script
       }
     }
 
     stage('Test App') {
       steps {
+        sh 'chmod +x ./scripts/test.sh'
         sh './scripts/test.sh'  // Corrected the syntax
       }
     }
