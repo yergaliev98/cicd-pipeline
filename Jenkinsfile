@@ -38,14 +38,11 @@ pipeline {
     stage('Push the image') {
       steps {
         script {
-          // Log in to Docker registry and push the image
-          docker.withRegistry("https://${REGISTRY}", DOCKER_CREDS) {
-            def image = docker.image("${DOCKER_IMAGE}:${env.BUILD_NUMBER}")
-            image.push("${env.BUILD_NUMBER}")  // Push specific build tag
-            image.push('latest')  // Optionally push the 'latest' tag
-          }
+          withDockerRegistry(credentialsId: 'beka98-dockerhub') {
+             sh "docker push -t beka98/mybuildimage:${env.BUILD_NUMBER}"
         }
       }
     }
   }
+}
 }
