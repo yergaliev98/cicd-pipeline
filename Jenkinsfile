@@ -1,6 +1,5 @@
 pipeline {
   agent any
-  def image
   tools {
     nodejs('23.5.0')  // Ensure this NodeJS tool is configured in Jenkins' Global Tool Configuration
     jdk('OpenJDK8')
@@ -24,7 +23,7 @@ pipeline {
     stage('Build image') {
       steps {
                 script {
-                        image = docker.build("beka98/mybuild")
+                        def image = docker.build("beka98/mybuild")
           }
       }
     }
