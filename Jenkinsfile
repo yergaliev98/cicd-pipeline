@@ -27,21 +27,16 @@ pipeline {
       }
     }
 
-    stage('Build Docker Image') {
-      steps {
-        script {
-          // Build the Docker image and store it in a variable
-          def image = docker.build("${DOCKER_IMAGE}:${env.BUILD_NUMBER}")
-        }
-      }
-    }
 
-    stage('Push the image') {
+   stage('Push the image') {
       steps {
         script {
-          withDockerRegistry(credentialsId: 'beka98-dockerhub') {
-             sh "docker push beka98/mybuildimage:${env.BUILD_NUMBER}"
-        }
+         docker.withRegistry(REGISTRY, DOCKER_CREDS) {
+                        // Tag and push the image
+                        def image = docker.build("${DOCKER_IMAGE}:${env.BUILD_NUMBER}")
+                        image.push("${env.BUILD_NUMBER}")
+                        image.push('latest')
+                    }
       }
     }
   }
