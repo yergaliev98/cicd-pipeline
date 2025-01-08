@@ -25,13 +25,14 @@ pipeline {
 
     stage('Push the image') {
       steps {
-        sh '''docker.withRegistry(REGISTRY, DOCKER_CREDS) {
-                        // Tag and push the image
-                        def image = docker.build("${DOCKER_IMAGE}:${env.BUILD_NUMBER}")
-                        image.push("${env.BUILD_NUMBER}")
-                        image.push(\'latest\')
-                    }
-'''
+          script {
+            // Log in to Docker registry and push the image
+            docker.withRegistry(REGISTRY, DOCKER_CREDS) {
+                // Tag and push the image
+                def image = docker.build("${DOCKER_IMAGE}:${env.BUILD_NUMBER}")
+                image.push("${env.BUILD_NUMBER}")
+                image.push('latest')  
+            }
         }
       }
 
