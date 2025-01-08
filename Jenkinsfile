@@ -3,7 +3,7 @@ pipeline {
   
   environment {
     DOCKER_IMAGE = 'mybuildimage'
-    REGISTRY = 'https://registry.hub.docker.com'  // Using default Docker Hub registry (no need for 'https://')
+    REGISTRY = 'registry.hub.docker.com'  // Using default Docker Hub registry (no need for 'https://')
     DOCKER_CREDS = 'beka98-dockerhub'  // Make sure this credential exists in Jenkins
   }
   
