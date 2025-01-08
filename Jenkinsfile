@@ -27,6 +27,8 @@ pipeline {
                         def image = docker.build("beka98/mybuild")
           }
       }
+    }
+
      stage('Push the image') {
        steps {
                 script {
@@ -40,4 +42,3 @@ pipeline {
       }
     }
   }
-}
