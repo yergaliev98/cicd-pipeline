@@ -1,6 +1,6 @@
 pipeline {
   agent any
-  
+  def image
   tools {
     nodejs('23.5.0')  // Ensure this NodeJS tool is configured in Jenkins' Global Tool Configuration
     jdk('OpenJDK8')
@@ -24,7 +24,7 @@ pipeline {
     stage('Build image') {
       steps {
                 script {
-                        def image = docker.build("beka98/mybuild")
+                        image = docker.build("beka98/mybuild")
           }
       }
     }
@@ -34,8 +34,7 @@ pipeline {
                 script {
           docker.withRegistry('https://registry.hub.docker.com', 'beka98-dockerhub') {
                         // Tag and push the image
-                        image.push("${env.BUILD_NUMBER}")
-                        image.push('latest')
+                        image.push()
                     }
                 }
        }
