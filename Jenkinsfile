@@ -40,7 +40,7 @@ pipeline {
       steps {
         script {
           withDockerRegistry(credentialsId: 'beka98-dockerhub') {
-             sh "docker push -t beka98/mybuildimage:${env.BUILD_NUMBER}"
+             sh "docker push beka98/mybuildimage:${env.BUILD_NUMBER}"
         }
       }
     }
