@@ -43,3 +43,4 @@ pipeline {
       DOCKER_CREDS = 'beka98-dockerhub'
     }
   }
+}
