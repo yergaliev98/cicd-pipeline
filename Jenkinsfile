@@ -22,15 +22,21 @@ pipeline {
     }
 
     stage('Build image') {
-        def image = docker.build("beka98/mybuild")
-    }
-
+      steps {
+                script {
+                        def image = docker.build("beka98/mybuild")
+          }
+      }
      stage('Push the image') {
+       steps {
+                script {
           docker.withRegistry('https://registry.hub.docker.com', 'beka98-dockerhub') {
                         // Tag and push the image
                         image.push("${env.BUILD_NUMBER}")
                         image.push('latest')
                     }
+                }
+       }
       }
     }
   }
