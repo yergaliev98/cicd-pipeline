@@ -1,12 +1,6 @@
 pipeline {
   agent any
   
-  environment {
-    DOCKER_IMAGE = 'mybuildimage'
-    REGISTRY = 'registry.hub.docker.com'  // Using default Docker Hub registry (no need for 'https://')
-    DOCKER_CREDS = 'beka98-dockerhub'  // Make sure this credential exists in Jenkins
-  }
-  
   tools {
     nodejs('23.5.0')  // Ensure this NodeJS tool is configured in Jenkins' Global Tool Configuration
     jdk('OpenJDK8')
@@ -27,18 +21,17 @@ pipeline {
       }
     }
 
+    stage('Build image') {
+        def image = docker.build("beka98/mybuild")
+    }
 
-   stage('Push the image') {
-      steps {
-        script {
-         docker.withRegistry(REGISTRY, DOCKER_CREDS) {
+     stage('Push the image') {
+          docker.withRegistry('https://registry.hub.docker.com', 'beka98-dockerhub') {
                         // Tag and push the image
-                        def image = docker.build("${DOCKER_IMAGE}:${env.BUILD_NUMBER}")
                         image.push("${env.BUILD_NUMBER}")
                         image.push('latest')
                     }
       }
     }
   }
-}
-}
+
