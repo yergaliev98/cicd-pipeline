@@ -9,6 +9,7 @@ pipeline {
   
   tools {
     nodejs('23.5.0')  // Ensure this NodeJS tool is configured in Jenkins' Global Tool Configuration
+    jdk('OpenJDK8')
   }
 
   stages {
