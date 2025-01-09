@@ -1,12 +1,18 @@
 pipeline {
-  agent any
-  tools {
-    nodejs('23.5.0')  // Ensure this NodeJS tool is configured in Jenkins' Global Tool Configuration
-    jdk('OpenJDK8')
-  }
+    environment {
+        imagename = "beka98/mybuild"
+        dockerImage = ''
+        dockerHubCredentials = 'beka98-dockerhub'
+    }
+ 
+    agent any
+    tools {
+      nodejs('23.5.0')  // Ensure this NodeJS tool is configured in Jenkins' Global Tool Configuration
+      jdk('OpenJDK8')
+    }
 
-  stages {
-    stage('Build App') {
+   stages {
+     stage('Build App') {
       steps {
         sh 'chmod +x ./scripts/build.sh'
         sh './scripts/build.sh'  // Corrected the syntax for calling the shell script
@@ -19,24 +25,30 @@ pipeline {
         sh './scripts/test.sh'  // Corrected the syntax
       }
     }
-
-    stage('Build image') {
-      steps {
+ 
+    
+        stage('Building image') {
+            steps {
                 script {
-                        def image = docker.build("beka98/mybuild")
-          }
-      }
-    }
-
-     stage('Push the image') {
-       steps {
+                    dockerImage = docker.build "${imagename}:latest"
+                }
+            }
+        }
+ 
+ 
+ 
+        stage('Deploy Image') {
+            steps {
                 script {
-          docker.withRegistry('https://registry.hub.docker.com', 'beka98-dockerhub') {
-                        // Tag and push the image
-                        image.push()
+                    // Use Jenkins credentials for Docker Hub login
+                    withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+ 
+                        // Push the image
+                        sh "docker push ${imagename}:latest"
                     }
                 }
-       }
-      }
+            }
+        }
     }
-  }
+}
